@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <h1 class="display-4 text-primary fw-bold">{{ current_user.director_name }}</h1>
+            <p class="text-muted">Director of {{ director.clg_name }}</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-center text-uppercase text-secondary fw-bold">Director Profile</h5>
+                    <hr class="my-4">
+                    <p class="card-text">
+                        <strong>University:</strong> {{ director.clg_name }}
+                    </p>
+                    <p class="card-text">
+                        <strong>University ID:</strong> {{ director.clg_id }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Email:</strong> 
+                        <a href="mailto:{{ director.email }}" class="text-decoration-none text-primary fw-bold">
+                            {{ director.email }}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Modern Styling */
+.card {
+    border-radius: 15px;
+    background-color:rgb(221, 17, 17);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.card-text {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color:rgb(226, 223, 223);
+}
+
+a.text-decoration-none {
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+a.text-decoration-none:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+h1.display-4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.text-muted {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #6c757d;
+}
+</style>
+
+{% endblock content %}

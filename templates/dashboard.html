@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mb-4">
+    <h6 class='subtitle'>
+        {{ current_user.stu_name }}
+        {{ current_user.prof_name }}
+        {{ current_user.director_name }}
+        {{ current_user.name }}
+        's Dashboard</h6>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <a href="" class="btn btn-secondary">Total Students : <strong> {{total_students}}</strong></a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-secondary">Total Professors : <strong>{{total_professors}}</strong></a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-secondary">Total Teams :<strong>{{total_teams}}</strong> </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn btn-secondary">Total Projects : <strong>{{total_projects}}</strong></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <p class="btn btn-secondary">Total Branches :<strong> {{ dept_wise_projects}}</strong></p>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="outer">
+        <div class="dot"></div>
+        <div class="card">
+          <div class="ray"></div>
+          <div class="text">{{total_students}}</div>
+          <div>Total Students</div>
+          <div class="line topl"></div>
+          <div class="line leftl"></div>
+          <div class="line bottoml"></div>
+          <div class="line rightl"></div>
+        </div>
+      </div>
+    
+</div>
+
+
+{% endblock content %}

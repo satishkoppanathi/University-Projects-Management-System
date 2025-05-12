@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* General Styling */
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table th {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.1); /* Light blue hover effect */
+    }
+
+    .shadow-sm {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h5 {
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .chart-container {
+        padding: 20px;
+    }
+
+    .chart-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .summary-card h3 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .summary-card h5 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container mt-5">
+    <!-- Header Section -->
+    <div class="row">
+        <div class="col-md-6">
+            <p class="text-muted">Monitor and analyze the progress</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <h3>Welcome, {{ current_user.director_name }}</h3>
+        </div>
+        <hr>
+    </div>
+
+    <!-- Summary Section -->
+    <div class="row text-center mb-5">
+        <div class="col-md-3">
+            <div class="card shadow-sm summary-card">
+                <div class="card-body">
+                    <h5>Total Students</h5>
+                    <h3 class="text-primary">{{ total_students }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm summary-card">
+                <div class="card-body">
+                    <h5>Total Professors</h5>
+                    <h3 class="text-success">{{ total_professors }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm summary-card">
+                <div class="card-body">
+                    <h5>Total Teams</h5>
+                    <h3 class="text-warning">{{ total_teams }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm summary-card">
+                <div class="card-body">
+                    <h5>Total Projects</h5>
+                    <h3 class="text-danger">{{ total_projects }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department-Wise Tables -->
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <h5 class="text-center">Department-Wise Students</h5>
+            <table class="table table-striped table-hover table-bordered shadow-sm">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Department</th>
+                        <th>Number of Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept, count in total_students_in_each_dept %}
+                    <tr>
+                        <td>{{ dept|upper }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h5 class="text-center">Department-Wise Professors</h5>
+            <table class="table table-striped table-hover table-bordered shadow-sm">
+                <thead class="table-success">
+                    <tr>
+                        <th>Department</th>
+                        <th>Number of Professors</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept, count in total_professors_in_each_dept %}
+                    <tr>
+                        <td>{{ dept|upper }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h5 class="text-center">Department-Wise Teams</h5>
+            <table class="table table-striped table-hover table-bordered shadow-sm">
+                <thead class="table-warning">
+                    <tr>
+                        <th>Department</th>
+                        <th>Number of Teams</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dept, count in total_teams_in_each_dept %}
+                    <tr>
+                        <td>{{ dept|upper }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Visualization Section -->
+    <div class="row mb-5">
+        <!-- Month-Wise Number of Projects -->
+        <div class="col-md-6 chart-container">
+            <h5 class="chart-title">Month-Wise Number of Projects</h5>
+            <canvas id="projectsChart" style="height: 300px;"></canvas>
+        </div>
+
+        <!-- Project Progress -->
+        <div class="col-md-6 chart-container">
+            <h5 class="chart-title">Project Progress</h5>
+            <canvas id="progressChart" style="height: 300px;"></canvas>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <!-- Department-Wise Project Distribution -->
+        <div class="col-md-6 chart-container">
+            <h5 class="chart-title">Department-Wise Project Distribution</h5>
+            <canvas id="deptPieChart" style="height: 300px;"></canvas>
+        </div>
+
+        <!-- Department-Wise Total Projects -->
+        <div class="col-md-6 chart-container">
+            <h5 class="chart-title">Department-Wise Total Projects</h5>
+            <canvas id="deptChart" style="height: 300px;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('projectsChart').getContext('2d');
+    var projectsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ months| tojson }},
+    datasets: [{
+        label: 'Number of Projects',
+        data: {{ counts| tojson }},
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderWidth: 1
+            }]
+        },
+    options: {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                        text: 'Month'
+                },
+                grid: {
+                    display: false  // Remove grid lines on x-axis
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                        text: 'Number of Projects'
+                },
+                beginAtZero: true,
+                    ticks: {
+                    stepSize: 1,  // Ensure y-axis displays only integers
+                        callback: function(value) {
+                            if (Number.isInteger(value)) {
+                                return value;
+                            }
+                        }
+                },
+                grid: {
+                    display: false  // Remove grid lines on y-axis
+                }
+            }
+        },
+        animation: {
+            duration: 1000, // Animation duration in milliseconds
+            easing: 'easeOutBounce' // Animation easing effect
+        }
+    }
+    });
+
+    var ctx2 = document.getElementById('progressChart').getContext('2d');
+    var progressChart = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: ['In Progress', 'Completed'],
+            datasets: [{
+                data: [{{ inprogress_count }}, {{ completed_count }}],
+        backgroundColor: ['rgba(243, 229, 26, 0.59)', 'rgba(34, 209, 46, 0.91)'],
+        borderColor: ['rgb(231, 212, 43)', 'rgb(22, 80, 8)'],
+        borderWidth: 1
+    }]
+        },
+    options: {
+        responsive: false, // Disable responsiveness to respect fixed dimensions
+            plugins: {
+            legend: {
+                position: 'top',
+                },
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return tooltipItem.label + ': ' + tooltipItem.raw;
+                    }
+                }
+            }
+        },
+        animation: {
+            duration: 1000, // Animation duration in milliseconds
+            easing: 'easeOutBounce' // Animation easing effect
+        }
+    }
+    });
+
+    var ctx3 = document.getElementById('deptChart').getContext('2d');
+    var deptChart = new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: {{ depts| tojson }},
+    datasets: [{
+        label: 'Total Projects',
+        data: {{ dept_counts| tojson }},
+        backgroundColor: 'rgba(233, 29, 206, 0.66)',
+        borderColor: 'rgba(94, 7, 94, 0.67)',
+        borderWidth: 1
+            }]
+        },
+    options: {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                        text: 'Department'
+                },
+                grid: {
+                    display: false  // Remove grid lines on x-axis
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                        text: 'Total Projects'
+                },
+                beginAtZero: true,
+                    ticks: {
+                    stepSize: 1,  // Ensure y-axis displays only integers
+                        callback: function(value) {
+                            if (Number.isInteger(value)) {
+                                return value;
+                            }
+                        }
+                },
+                grid: {
+                    display: false  // Remove grid lines on y-axis
+                }
+            }
+        },
+        animation: {
+            duration: 1000, // Animation duration in milliseconds
+            easing: 'easeOutBounce' // Animation easing effect
+        }
+    }
+    });
+
+    var ctx4 = document.getElementById('deptPieChart').getContext('2d');
+    var totalProjects = {{ dept_counts|sum }};
+    var deptPieChart = new Chart(ctx4, {
+        type: 'pie',
+        data: {
+            labels: {{ depts|tojson }},
+            datasets: [{
+                data: {{ dept_counts|tojson }},
+                backgroundColor: [
+                    'rgba(0, 123, 255, 0.5)',
+                    'rgba(40, 167, 69, 0.5)',
+                    'rgba(255, 193, 7, 0.2)',
+                    'rgba(220, 53, 69, 0.2)',
+                    'rgba(23, 162, 184, 0.2)',
+                    'rgba(108, 117, 125, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(23, 162, 184, 1)',
+                    'rgba(108, 117, 125, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            var value = tooltipItem.raw;
+                            var percentage = ((value / totalProjects) * 100).toFixed(2);
+                            return tooltipItem.label + ': ' + percentage + '%';
+                        }
+                    }
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeOutBounce'
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Welcome Message -->
+    <p class="text-center text-muted" style="font-size: 1.2rem;">
+        Welcome, <strong>{{ professor.prof_name }}</strong> (HOD of {{ professor.dept|upper }} Department)!
+    </p>
+
+    <!-- Summary Section -->
+    <div class="row text-center mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Total Projects</h5>
+                    <h3 class="text-primary">{{ total_projects }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-warning">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">Projects In Progress</h5>
+                    <h3 class="text-warning">{{ inprogress_projects }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Completed Projects</h5>
+                    <h3 class="text-success">{{ completed_projects }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-danger">
+                <div class="card-body">
+                    <h5 class="card-title text-danger">Pending Submissions</h5>
+                    <h3 class="text-danger">{{ pending_submissions }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualization Section -->
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h5 class="text-center">Project Status Distribution</h5>
+            <canvas id="projectStatusChart" class="shadow-sm p-3 bg-white rounded" style="height:300px"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h5 class="text-center">Team Contributions</h5>
+            <canvas id="teamContributionsChart" class="shadow-sm p-3 bg-white rounded" style="height:300px"></canvas>
+        </div>
+    </div>
+
+    <!-- Projects Table -->
+    <h5 class="mt-5 text-center">Department Projects</h5>
+    <table class="table table-striped table-hover table-bordered shadow-sm">
+        <thead class="table-primary">
+            <tr class="text-center">
+                <th>Project ID</th>
+                <th>Title</th>
+                <th>Team</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td class="text-center">{{ project.project_id }}</td>
+                <td>{{ project.project_title }}</td>
+                <td class="text-center">{{ project.team.team_id }}</td>
+                <td class="text-center">
+                    {% if project.progress == 'completed' %}
+                    <span class="badge bg-success">Completed</span>
+                    {% elif project.progress == 'inprogress' %}
+                    <span class="badge bg-warning text-dark">In Progress</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Pending</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('hod_dashboard', prof_id=professor.prof_id, page=page-1) }}">Previous</a>
+                </li>
+                {% endif %}
+                {% for p in range(1, total_pages + 1) %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('hod_dashboard', prof_id=professor.prof_id, page=p) }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+                {% if page < total_pages %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('hod_dashboard', prof_id=professor.prof_id, page=page+1) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Teams Table -->
+    <h5 class="mt-5 text-center">Department Teams</h5>
+    <table class="table table-striped table-hover table-bordered shadow-sm">
+        <thead class="table-secondary">
+            <tr class="text-center">
+                <th>Team ID</th>
+                <th>Team Lead</th>
+                <th>Member 1</th>
+                <th>Member 2</th>
+                <th>Member 3</th>
+                <th>Member 4</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr>
+                <td class="text-center">{{ team.team_id }}</td>
+                <td>{{ team.team_lead.stu_name }}</td>
+                <td>{{ team.member_1_student.stu_name }}</td>
+                <td>{{ team.member_2_student.stu_name }}</td>
+                <td>{{ team.member_3_student.stu_name }}</td>
+                <td>
+                    {% if team.member_4_student %}
+                        {{ team.member_4_student.stu_name }}
+                    {% else %}
+                        <span class="text-muted">N/A</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Project Status Distribution Chart
+    var ctx1 = document.getElementById('projectStatusChart').getContext('2d');
+    var projectStatusChart = new Chart(ctx1, {
+        type: 'pie',
+        data: {
+            labels: ['In Progress', 'Completed', 'Pending'],
+            datasets: [{
+                data: [{{ inprogress_projects }}, {{ completed_projects }}, {{ pending_submissions }}],
+                backgroundColor: ['#FFC107', '#28A745', '#6C757D'],
+                borderColor: ['#FFC107', '#28A745', '#6C757D'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // Team Contributions Chart
+    var ctx2 = document.getElementById('teamContributionsChart').getContext('2d');
+    var teamContributionsChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: [{% for team in teams %}'{{ team.team_id }}',{% endfor %}], // Team IDs
+            datasets: [{
+                label: 'Projects',
+                data: [{% for team in teams %}{{ team.project_count }},{% endfor %}], // Project counts
+                backgroundColor: '#007BFF',
+                borderColor: '#007BFF',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

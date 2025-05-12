@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Flash Messages -->
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success alert-dismissible fade show small-alert mt-3 mx-auto" role="alert" style="max-width: 400px;">
+    <strong>Success:</strong> {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<script>
+    // Auto-dismiss the alert after 5 seconds
+    setTimeout(() => {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+        }
+    }, 5000);
+</script>
+{% endfor %}
+
+<!-- Login Form -->
+<div class="container mt-5" >
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="login-card border-0">
+                <div class="card-header text-center bg-gradient-primary text-white">
+                    <h6 class="" style="color: #6c757d;">Welcome Back</h6>
+                    <p class="mb-0" style="color: #0d6efd;">Please login to your account</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Login As -->
+                        <div class="mb-4">
+                            {{ form.login_as.label(class="form-label fw-semibold") }}
+                            {{ form.login_as(class="form-control rounded-pill") }}
+                        </div>
+
+                        <!-- ID -->
+                        <div class="mb-4">
+                            {{ form.id.label(class="form-label fw-semibold") }}
+                            {{ form.id(class="form-control rounded-pill") }}
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            {{ form.password.label(class="form-label fw-semibold") }}
+                            {{ form.password(class="form-control rounded-pill") }}
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg rounded-pill") }}
+                        </div>
+                        <!-- Forgot Password Section -->
+                        <a href="" class="btn btn-link text-danger mb-3">Forgot Password?</a>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <img src="{{ url_for('static', filename='images/login.svg') }}" alt="Login Image" class="img-fluid" style="height: 300px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-5">
+                    <div class="card-footer text-center  text-white">
+
+                        <!-- Registration Links -->
+                        <p class="mb-2" style="color: green;">Don't have an account?</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a href="{{ url_for('register_stu') }}" class="btn btn-info btn-sm rounded-pill" style="background-color: rgb(66, 190, 240); color: rgb(0, 0, 0);">Register as Student</a>
+                            <a href="{{ url_for('register_prof') }}" class="btn btn-pink btn-sm rounded-pill" style="background-color: rgb(235, 49, 151); color: rgb(0, 0, 0);">Register as Professor</a>
+                            <a href="{{ url_for('register_director') }}" class="btn btn-warning btn-sm rounded-pill" style="background-color: rgb(241, 241, 59); color: black;">Register as Director</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<style>
+    .form-label {
+        font-size: 0.9rem;
+
+        color: lightseagreen;
+    }
+
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.5);
+        /* Transparent background */
+        border: 1px solid rgba(0, 123, 255, 0.5);
+        /* Light blue border */
+        color: #343a40;
+        /* Dark text color for readability */
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 1rem;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Slightly less transparent on focus */
+        border-color: #007bff;
+        /* Blue border on focus */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        /* Subtle glow effect */
+        outline: none;
+    }
+
+    .btn-primary {
+        background-color: #07e1b5;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 30px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #00cbdc;
+    }
+</style>
+{% endblock %}

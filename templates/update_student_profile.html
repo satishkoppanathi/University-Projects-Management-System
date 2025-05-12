@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 d-flex justify-content-center">
+            <img src="{{ url_for('static', filename='images/update.svg') }}" alt="Student Registration"
+             height="470px">
+        </div>
+        <div class="col-md-6 mt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6>Hii ! {{current_user.stu_name}} update Your profile</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="POST" enctype="multipart/form-data"
+                        action="{{url_for('update_student_profile', stu_id=current_user.stu_id)}}">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label form-label">{{ form.stu_id.label.text }}</label>
+                            <div class="col-sm-8">
+                                {{ form.stu_id(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label form-label">{{ form.stu_name.label.text }}</label>
+                            <div class="col-sm-8">
+                                {{ form.stu_name(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label form-label">{{ form.year_of_study.label.text
+                                }}</label>
+                            <div class="col-sm-8">
+                                {{ form.year_of_study(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label form-label">{{ form.profile_pic.label.text }}</label>
+                            <div class="col-sm-8">
+                                {{ form.profile_pic(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-4 col-form-label form-label">{{ form.aboutme.label.text }}</label>
+                            <div class="col-sm-8">
+                                {{ form.aboutme(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            {{ form.submit(class="btn btn-secondary btn-sm neon-effect", style="width: 200px;") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

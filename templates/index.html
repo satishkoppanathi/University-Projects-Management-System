@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid" style="background:linear-gradient(130deg,rgb(3, 56, 65),rgb(63, 235, 226)); padding: 15px;">
+    <div class="row">
+        <div class="col-md-5">
+            <img src="{{ url_for('static', filename='images/connect-removebg-preview.png') }}"
+                alt="Student Registration" style="filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));">
+        </div>
+        <div class="col-md-7 mt-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 style="color: aqua;">Welcome to <span class="title"> ProjectSphere</span></h6>
+                    <p style="padding-left: 30px; font-family: 'Turret Road', sans-serif; color: rgb(243, 225, 192); font-weight: 500;">
+                        ProjectSphere provides a unified platform to track tasks, deadlines, and team progress effortlessly. Its intuitive dashboard helps streamline workflows and improve efficiency.
+                    </p>
+
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-end">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <p style="padding: 30px; font-family: 'Roboto', sans-serif; color: wheat;">
+                                With real-time communication tools, teams can share updates and resolve issues instantly. This ensures smooth collaboration and enhances overall productivity.
+                            </p>
+                            <a href="#features" class="btn hero-btn neon-effect">Get Started</a>
+                        </div>
+                        <div class="col-md-5">
+                            <img src="{{ url_for('static', filename='images/globe-removebg-preview.png') }}"
+                                alt="Student Registration"
+                                style="filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5)); height: 200px; padding: 20px;">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr>
+</div>
+
+
+<!-- Hero Section Start -->
+<!-- <section class="hero-section mb-5">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="row">
+
+        </div>
+
+        
+        <h1 class="hero-title title">Welcome to <span class=""> ProjectSphere</span></h1>
+        <h6 class="hero-text ">Your ultimate solution for streamlined project management and tracking.</h6>
+
+        <a href="#features" class="btn hero-btn">Get Started</a>
+    </div>
+</section> -->
+<!-- Hero Section End -->
+<div class="container justify-content-center mt-5">
+    <div class="row ">
+        <div class="col-md-12">
+            <h6 class="">Which project can I do ?</h6>
+        </div>
+    </div>
+    <div class="row d-flex align-items-center">
+        <div class="col-md-3">
+            <img src="{{url_for('static',filename='images/suggest.svg')}}" alt="" height="250px"
+                style="filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));">
+        </div>
+        <div class="col-md-9 text-center">
+            <p>Explore a variety of project ideas tailored to your interests and skills. Let us help you find the
+                perfect project to enhance your learning and showcase your abilities.</p>
+            <a class=" neon-effect" href="{{url_for('predict')}}">Suggest me a Project</a>
+        </div>
+
+    </div>
+</div>
+
+
+<section class="faq-section py-3">
+    <div class="container">
+        <div class="w-lg-50 mx-auto">
+            <h6 class="mb-2 text-center">FAQ | Frequently Asked Questions</h6>
+            <h4 class="mb-5 text-center">Have a Questions</h4>
+            <div class="accordion accordion-flush" id="accordionExample">
+
+                <!-- 1: coll1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <!--   data-bs-target="#coll1",  controls="coll1", id="coll1", aria-expanded="true"      -->
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#coll1"
+                            aria-expanded="true" aria-controls="coll1">
+                            <h5> What is ProjectSphere, and how can it help me?</h5>
+                        </button>
+                    </h2>
+                    <!-- show : by default Always open -->
+                    <div id="coll1" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            ProjectSphere is a project management platform designed to help teams and individuals
+                            organize tasks, track progress, and collaborate seamlessly. It streamlines project
+                            workflows, ensuring timely delivery and better communication across teams.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2: coll2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <!--       collapsed,   aria-expanded="false"   -->
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#coll2" aria-expanded="false" aria-controls="coll2">
+                            <h5>Is ProjectSphere suitable for both small and large teams?</h5>
+                        </button>
+                    </h2>
+                    <div id="coll2" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Absolutely! Whether you're managing a small team or working on large-scale projects,
+                            ProjectSphere is scalable and can handle the needs of various team sizes, offering features
+                            that fit both solo users and enterprise-level operations.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3: coll3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#coll3" aria-expanded="false" aria-controls="coll3">
+                            <h5>Is my data secure on ProjectSphere?</h5>
+                        </button>
+                    </h2>
+                    <div id="coll3" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Absolutely. ProjectSphere ensures your data is protected with industry-standard encryption
+                            and security protocols. We prioritize your privacy and safeguard your project information
+                            from unauthorized access.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4: coll4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <!--   target="#coll4",  id="coll4"  -->
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#coll4" aria-expanded="false" aria-controls="coll4">
+                            <h5>Can I manage multiple projects at the same time?</h5>
+                        </button>
+                    </h2>
+                    <div id="coll4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Yes, ProjectSphere is designed to handle multiple projects simultaneously. You can easily
+                            switch between projects, monitor progress, and assign tasks across different teams or
+                            departments in a single platform.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5: coll5 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <!--   target="#coll5",  id="coll5"  -->
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#coll5" aria-expanded="false" aria-controls="coll5">
+                            <h5>Does ProjectSphere support Gantt charts and timelines?</h5>
+                        </button>
+                    </h2>
+                    <div id="coll5" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            Yes, ProjectSphere includes Gantt charts and project timelines to help visualize your
+                            project's progress. These tools allow you to track dependencies, deadlines, and milestones
+                            in a clear, visual format.
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5" style="background-color: #f9f9f9;">
+    <div class="container">
+        <h4 class="text-center mb-5 fw-bold text-success">What Our Users Say</h4>
+        <div class="row">
+            <!-- Testimonial 1 -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='images/prof1.jpg') }}" alt="User 1"
+                            class="rounded-circle mb-3" width="80">
+                        <h5 class="card-title fw-bold text-light">John Doe</h5>
+                        <p class="card-text text-secondary">"ProjectSphere has completely transformed the way we manage
+                            our
+                            projects. The intuitive interface and powerful features make collaboration seamless."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='images/stu1.jpg') }}" alt="User 2"
+                            class="rounded-circle mb-3" width="80">
+                        <h5 class="card-title fw-bold">Jane Smith</h5>
+                        <p class="card-text text-secondary">"I love how easy it is to track progress and assign tasks
+                            with
+                            ProjectSphere. It’s a game-changer for our team."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body text-center">
+                        <img src="{{ url_for('static', filename='images/prof2.jpg') }}" alt="User 3"
+                            class="rounded-circle mb-3" width="100">
+                        <h5 class="card-title fw-bold">Michael Brown</h5>
+                        <p class="card-text text-secondary">"The Gantt charts and timelines are incredibly helpful for
+                            keeping our projects on track. Highly recommend ProjectSphere!"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</div>
+
+
+
+{% endblock content %}

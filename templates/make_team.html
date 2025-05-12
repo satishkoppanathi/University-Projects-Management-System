@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Form Container Styling */
+    .form-container {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .form-container h3 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .form-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .form-control {
+        border-radius: 20px;
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+
+    .btn-secondary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Table Container Styling */
+    .table-container {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-container h3 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+        padding: 10px;
+        font-size: 1rem;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f8f9fa;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #e9ecef;
+    }
+</style>
+
+<div class="container">
+    <!-- Form Section -->
+    <div class="form-container">
+        <h3 class="text-center mb-4">Create a New Team</h3>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                {{ form.team_id.label(class="form-label") }}
+                {{ form.team_id(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.team_lead_id.label(class="form-label") }}
+                {{ form.team_lead_id(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.member_1.label(class="form-label") }}
+                {{ form.member_1(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.member_2.label(class="form-label") }}
+                {{ form.member_2(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.member_3.label(class="form-label") }}
+                {{ form.member_3(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.member_4.label(class="form-label") }}
+                {{ form.member_4(class="form-control") }}
+            </div>
+            <div class="d-grid">
+                {{ form.submit(class="btn btn-secondary btn-lg") }}
+            </div>
+        </form>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+        <h3 class="text-center mb-4">Teams</h3>
+        <table class="table table-striped table-hover shadow-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Team ID</th>
+                    <th scope="col">Team Lead</th>
+                    <th scope="col">Member 1</th>
+                    <th scope="col">Member 2</th>
+                    <th scope="col">Member 3</th>
+                    <th scope="col">Member 4</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                <tr>
+                    <td>{{ team.team_id }}</td>
+                    <td>{{ team.team_lead.stu_name }}</td>
+                    <td>{{ team.member_1_student.stu_name }}</td>
+                    <td>{{ team.member_2_student.stu_name }}</td>
+                    <td>{{ team.member_3_student.stu_name }}</td>
+                    <td>{{ team.member_4_student.stu_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

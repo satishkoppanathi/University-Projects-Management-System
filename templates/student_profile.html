@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* General Styling */
+  
+
+  
+    h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #007bff; /* Blue color for the name */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    h5 {
+        font-size: 1.2rem;
+        color: #495057; /* Dark gray for details */
+        margin-bottom: 10px;
+    }
+
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%; /* Ensures the image remains circular */
+        padding: 5px; /* Space for the gradient border */
+        background: linear-gradient(45deg,rgb(31, 116, 212),rgb(248, 68, 233),rgb(237, 250, 54)); /* Gradient border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    }
+    
+
+    .btn-outline-danger {
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 20px;
+        padding: 10px 20px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545; /* Red background on hover */
+        color: white;
+        border-color: #dc3545;
+    }
+
+    .row {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h6>welcome <span class="subtitle">{{ current_user.stu_name }}</span> !!</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <h5><strong>University:</strong> {{ university.clg_name }}</h5>
+            <h5><strong>Student Id:</strong> {{ student.stu_id }}</h5>
+            <h5><strong>E-Mail:</strong> {{ student.email }}</h5>
+            <h5><strong>Department:</strong> {{ student.dept }}</h5>
+            <h5><strong>Year:</strong> {{ student.year_of_study }}</h5>
+            <h5><strong>About Me:</strong> {{ student.about_me }}</h5>
+            <a href="{{ url_for('update_student_profile', stu_id=student.stu_id) }}" class="btn btn-outline-danger">Update Profile</a>
+        </div>
+        <div class="col-md-4 text-center">
+            {% if student.profile_pic %}
+            <img src="{{ url_for('static', filename='images/student_profiles/' + student.profile_pic) }}" class="rounded-circle profile-pic"
+                alt="Profile Picture">
+            {% else %}
+            <img src="{{ url_for('static', filename='images/default_profile.png') }}" class="rounded-circle profile-pic"
+                alt="Default Profile Picture">
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

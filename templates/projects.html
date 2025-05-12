@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Page Styling -->
+<style>
+    /* General Styling */
+    .nav-pills .nav-link {
+        border-radius: 50px;
+        font-weight: 500;
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .list__review {
+        list-style: none;
+        padding: 0;
+    }
+
+    .review__item {
+        background: rgba(255, 255, 255, 0.8); /* White background with transparency */
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .review__heading {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .review__content {
+        font-size: 0.95rem;
+        color: #6c757d;
+    }
+
+    .review__author {
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .review__left img {
+        margin-top: 10px;
+    }
+
+    .search-bar {
+        border-radius: 50px;
+    }
+
+    /* Background Image Styling */
+    
+
+    
+</style>
+
+<div class="container pt-4">
+    <!-- Search Bar -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form method="GET" action="{{ url_for('projects') }}">
+                <div class="input-group">
+                    <input type="text" class="form-control search-bar" name="search"
+                        placeholder="Search by project title..." value="{{ request.args.get('search', '') }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabs for Projects -->
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills flex-column justify-content-center mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all"
+                        type="button" role="tab" aria-controls="pills-all" aria-selected="true">All Projects</button>
+                </li>
+                {% if not current_user.director_name %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-department-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-department" type="button" role="tab" aria-controls="pills-department"
+                        aria-selected="false">Department</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-myprojects-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-myprojects" type="button" role="tab" aria-controls="pills-myprojects"
+                        aria-selected="false">My Projects</button>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <div class="tab-content" id="pills-tabContent">
+                <!-- All Projects Tab -->
+                <div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab"
+                    tabindex="0">
+                    <div class="container">
+                        {% if projects %}
+                        {% for project in projects %}
+                        <ul class="list__review">
+                            <li class="review__item">
+                                <h4 class="review__heading">
+                                    <span class="review__title">{{ project.project_title }}</span>
+                                </h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="review__left">
+                                        <p class="review__content">{{ project.description }} <br>- Supervised by
+                                            Professor <i>{{ project.professor.prof_name }}</i></p>
+                                        <p class="review__author"><strong>{{ project.team.team_lead.stu_name }}</strong>
+                                        </p>
+                                        {% if project.team.team_lead.profile_pic %}
+                                        <img src="{{url_for('static',filename='images/student_profiles/' + project.team.team_lead.profile_pic)}}"
+                                            class="rounded-circle" alt="Profile Picture" width="40">
+                                        {% else %}
+                                        <img src="{{url_for('static',filename='images/default_profile.png')}}"
+                                            class="rounded-circle" alt="Default Profile Picture" width="40">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center text-muted">No projects found matching your search.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Department Projects Tab -->
+                <div class="tab-pane fade" id="pills-department" role="tabpanel" aria-labelledby="pills-department-tab"
+                    tabindex="0">
+                    <div class="container">
+                        {% if department_projects %}
+                        {% for project in department_projects %}
+                        <ul class="list__review">
+                            <li class="review__item">
+                                <h4 class="review__heading">
+                                    <span class="review__title">{{ project.project_title }}</span>
+                                </h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="review__left">
+                                        <p class="review__content">{{ project.description }} <br>- Supervised by
+                                            Professor <i>{{ project.professor.prof_name }}</i></p>
+                                        <p class="review__author"><strong>{{ project.team.team_lead.stu_name }}</strong>
+                                        </p>
+                                        {% if project.team.team_lead.profile_pic %}
+                                        <img src="{{url_for('static',filename='images/student_profiles/' + project.team.team_lead.profile_pic)}}"
+                                            class="rounded-circle" alt="Profile Picture" width="40">
+                                        {% else %}
+                                        <img src="{{url_for('static',filename='images/default_profile.png')}}"
+                                            class="rounded-circle" alt="Default Profile Picture" width="40">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center text-muted">No department projects found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- My Projects Tab -->
+                <div class="tab-pane fade" id="pills-myprojects" role="tabpanel" aria-labelledby="pills-myprojects-tab"
+                    tabindex="0">
+                    <div class="container">
+                        {% if myprojects %}
+                        {% for project in myprojects %}
+                        <ul class="list__review">
+                            <li class="review__item">
+                                <h4 class="review__heading">
+                                    <span class="review__title">{{ project.project_title }}</span>
+                                </h4>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="review__left">
+                                        <p class="review__content">{{ project.description }} <br>- Supervised by
+                                            Professor <i>{{ project.professor.prof_name }}</i></p>
+                                        <p class="review__author"><strong>{{ project.team.team_lead.stu_name }}</strong>
+                                        </p>
+                                        {% if project.team.team_lead.profile_pic %}
+                                        <img src="{{url_for('static',filename='images/student_profiles/' + project.team.team_lead.profile_pic)}}"
+                                            class="rounded-circle" alt="Profile Picture" width="40">
+                                        {% else %}
+                                        <img src="{{url_for('static',filename='images/default_profile.png')}}"
+                                            class="rounded-circle" alt="Default Profile Picture" width="40">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-center text-muted">No projects found in My Projects.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

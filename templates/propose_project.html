@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Propose Project</h1>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        
+        {{ form.team_id.label(class="form-label") }}
+        {{ form.team_id(class="form-control") }}
+        {{ form.project_id.label(class="form-label") }}
+        {{ form.project_id(class="form-control") }}
+        {{ form.project_title.label(class="form-label") }}
+        {{ form.project_title(class="form-control") }}
+        {{ form.project_description.label(class="form-label") }}
+        {{ form.project_description(class="form-control") }}
+        <br />
+        {{ form.submit(class="btn btn-secondary") }}
+    </form>
+</div>
+{% endblock %}

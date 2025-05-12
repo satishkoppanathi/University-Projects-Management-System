@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Turret Road Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@200;300;400;500;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/dashboard.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/register_stu.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}">
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+
+  <!-- Custom css -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
+    integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+  <title>ProjectSphere</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand navtitle" href="{{url_for('home')}}" style="color: linear-gradient(90deg, #072035 20.69%, #220020 50.19%, #ebfc00cc 79.69%);">Project<span>Sphere</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item d-flex justify-content-center">
+            <a class="nav-link active" aria-current="page" href="{{url_for('home')}}"><i
+                class="fa-solid fa-house"></i><span>
+                Home
+              </span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('projects')}}"><i
+                class="fa-solid fa-file-alt"></i><span>Projects</span></a>
+          </li>
+          {% if current_user.stu_id %}
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa-solid fa-comment-dots"></i>Discuss</a>
+          </li>
+          {% endif %}
+          {% if current_user.prof_id and current_user.role == 'hod' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('make_team')}}"><i class="fa-solid fa-people-group"></i> MakeTeam</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('hod_dashboard', prof_id=current_user.prof_id) }}">
+              <i class="fa-regular fa-folder-open"></i>
+              HOD Dashboard
+            </a>
+          </li>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          {% if current_user.prof_id %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('professor_dashboard', prof_id=current_user.prof_id) }}">
+              <i class="fa-solid fa-chart-line"></i> Dashboard
+            </a>
+          </li>
+          <a class="nav-link" href="{{ url_for('assign_project',) }}">
+            <i class="fa-solid fa-briefcase"></i>Assign Project
+          </a>
+        </li>
+          {% elif current_user.stu_id %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student_dashboard', stu_id=current_user.stu_id) }}">
+              <i class="fa-solid fa-chart-line"></i> Dashboard
+            </a>
+          </li>
+          {% elif current_user.clg_id %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('dashboard', clg_id=current_user.clg_id) }}">
+              <i class="fa-solid fa-chart-line"></i> Dashboard
+            </a>
+          </li>
+          {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+      <div class="d-flex align-items-center">
+        {% if current_user.is_authenticated %}
+        <span class="me-3"><i class="fa-solid fa-bell"></i></span>
+        {% if current_user.stu_id %}
+        <a class="nav-link" href="{{ url_for('student_profile', stu_id=current_user.stu_id) }}">
+          {% if current_user.profile_pic %}
+          <img src="{{url_for('static',filename='images/student_profiles/'+ current_user.profile_pic)}}"
+            class="rounded-circle" height="40">
+          {% else %}
+          <img src="{{url_for('static',filename='images/default_profile.png')}}" class="rounded-circle" width="40"
+            alt="default profile pic">
+          {% endif %}
+        </a>
+        {% elif current_user.prof_id %}
+        <a class="nav-link" href="{{ url_for('professor_profile', prof_id=current_user.prof_id)}}"><img
+            src="https://i.postimg.cc/nrn1rVW3/logo.jpg" alt="profile image" class="rounded-circle" width="40"
+            height="40"></a>
+        {% else %}
+        <a class="nav-link" href="{{ url_for('director_profile', clg_id=current_user.clg_id) }}">
+          {% if current_user.profile_pic %}
+          <img src="{{url_for('static',filename='images/student_profiles/'+ current_user.profile_pic)}}"
+            class="rounded-circle" height="40">
+          {% else %}
+          <img src="{{url_for('static',filename='images/default_profile.png')}}" class="rounded-circle" width="40"
+            alt="default profile pic">
+          {% endif %}
+        </a>
+        {% endif %}
+        <a class="nav-link" href="{{url_for('logout')}}">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+        {% else %}
+        <a class="btn btn-primary px-4 py-2 rounded-pill shadow-sm" href="{{url_for('login')}}" style="background: linear-gradient(90deg, rgba(245, 204, 91, 1) 0%, rgba(255, 159, 64, 1) 100%); border: none; font-weight: bold; color: white;">
+          <i class="fa-solid fa-right-to-bracket me-2"></i>Log-In
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock content %}
+
+  <!-- Footer -->
+  <footer class="text-center text-lg-start" style="background: linear-gradient(90deg,rgb(3, 38, 43),rgb(63, 235, 226)); color: white;">
+    <div class="container p-4">
+        <div class="row">
+            <hr>
+            <!-- About Section -->
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                <h5 class="text-uppercase fw-bold">About ProjectSphere</h5>
+                <p>
+                    ProjectSphere is a platform to manage and collaborate on academic and professional projects. Stay organized
+                    and connected with your team.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase fw-bold">Quick Links</h5>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="{{ url_for('home') }}" class="text-white text-decoration-none">Home</a></li>
+                    <li><a href="{{ url_for('projects') }}" class="text-white text-decoration-none">Projects</a></li>
+                    <li><a href="{{ url_for('login') }}" class="text-white text-decoration-none">Login</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase fw-bold">Contact</h5>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="#" class="text-white text-decoration-none">Email: support@projectsphere.com</a></li>
+                    <li><a href="#" class="text-white text-decoration-none">Phone: +123 456 7890</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-3" style="background: linear-gradient(90deg,rgb(3, 38, 43),rgb(63, 235, 226)); ">
+        © 2025 ProjectSphere. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
