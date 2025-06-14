@@ -51,11 +51,36 @@ The **University Project Management System** is a full-stack web application bui
 └── README.md            # Project documentation
 ```
 
+## 🧪 Installation & Run Locally
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/university-project-management.git
+cd university-project-management
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+python app.py
+
+# Visit in browser
+http://localhost:5000
+```
+
+## 👨‍💻 Team
+
+- 👨‍🔧 **Team Lead**: S. Gnaneswar
+- 🎨 **Frontend Developers**: B. Jagadish Naik, C. Jayasri
+- 🖥️ **Backend Developer**: K. Satish
+
 ## 📈 Achievements & Impact
 
 - ✅ Improved supervision efficiency by 50% through digital dashboards
 - ✅ Enabled real-time tracking of over 100+ student projects
 - ✅ Reduced reporting errors with integrated performance analytics
-
-
 
