@@ -72,11 +72,6 @@ python app.py
 http://localhost:5000
 ```
 
-## 👨‍💻 Team
-
-- 👨‍🔧 **Team Lead**: S. Gnaneswar
-- 🎨 **Frontend Developers**: B. Jagadish Naik, C. Jayasri
-- 🖥️ **Backend Developer**: K. Satish
 
 ## 📈 Achievements & Impact
 
