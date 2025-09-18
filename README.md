@@ -1,4 +1,4 @@
-ProjectSphere # 🎓 University Project Management System
+# ProjectSphere - 🎓 University Project Management System
 
 **Role-Based Web Application for Academic Project Management and Performance Tracking**
 
